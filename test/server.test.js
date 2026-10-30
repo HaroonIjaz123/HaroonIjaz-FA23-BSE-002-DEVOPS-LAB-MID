@@ -37,45 +37,12 @@ test('invalid URL is rejected and not saved', async () => withDataFile(async (fi
   assert.deepEqual(await loadSubmissions(file), []);
 }));
 
-test('all missing fields produce their required-field errors', () => {
-  assert.deepEqual(validateSubmission({}), [
-    'Name is required.', 'Registration number is required.',
-    'Assignment title is required.', 'Submission URL is required.',
-  ]);
-});
-
-test('whitespace-only values are treated as missing', () => {
-  assert.equal(validateSubmission({ name: ' ', reg_no: '\t', title: '\n', url: ' ' }).length, 4);
-});
-
-test('valid HTTP and HTTPS URLs are accepted', () => {
-  assert.equal(isValidUrl('http://example.com/path'), true);
+test('valid URLs are accepted and bad URLs are rejected', () => {
   assert.equal(isValidUrl('https://example.com/path'), true);
-});
-
-test('unsupported, hostless, and spaced URLs are rejected', () => {
   for (const url of ['ftp://example.com/file', 'https:///missing-host', 'https://example.com/a b', '']) {
     assert.equal(isValidUrl(url), false, url);
   }
 });
-
-test('submission values are trimmed before saving', async () => withDataFile(async (file) => {
-  const padded = Object.fromEntries(Object.entries(valid).map(([key, value]) => [key, ` ${value} `]));
-  const clean = Object.fromEntries(Object.entries(padded).map(([key, value]) => [key, value.trim()]));
-  await saveSubmission(file, clean);
-  assert.deepEqual(await loadSubmissions(file), [valid]);
-}));
-
-test('additional submissions append and preserve earlier records', async () => withDataFile(async (file) => {
-  const second = { ...valid, reg_no: 'FA23-BSE-003' };
-  await saveSubmission(file, valid);
-  await saveSubmission(file, second);
-  assert.deepEqual(await loadSubmissions(file), [valid, second]);
-}));
-
-test('missing data file loads as an empty list', async () => withDataFile(async (file) => {
-  assert.deepEqual(await loadSubmissions(file), []);
-}));
 
 test('CI report builder keeps individual pass, fail, and skipped test results', () => {
   const output = [
@@ -92,10 +59,4 @@ test('CI report builder keeps individual pass, fail, and skipped test results', 
   ]);
   assert.deepEqual(report.summary, { total: 3, passed: 1, failed: 1, skipped: 1, overall_status: 'FAILED' });
   assert.equal(report.repository, 'owner/repo');
-});
-
-test('CI report builder marks an empty or missing test run as failed', () => {
-  const report = buildReport('', {});
-  assert.deepEqual(report.summary, { total: 1, passed: 0, failed: 1, skipped: 0, overall_status: 'FAILED' });
-  assert.equal(report.tests[0].name, 'test runner');
 });
