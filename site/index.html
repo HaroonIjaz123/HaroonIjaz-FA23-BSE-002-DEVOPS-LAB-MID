@@ -5,43 +5,175 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Assignment Submission Portal (Demo)</title>
   <style>
-    body { font-family: Arial, sans-serif; max-width: 760px; margin: 30px auto; padding: 0 12px; }
-    label { display: block; margin-top: 12px; font-weight: bold; }
-    input { width: 100%; padding: 8px; box-sizing: border-box; }
-    button { margin-top: 16px; padding: 10px 20px; }
-    #msg { margin-top: 10px; padding: 8px; display: none; }
-    .err { background: #fdecea; color: #b71c1c; }
-    .ok { background: #e8f5e9; color: #1b5e20; }
-    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-    th, td { border: 1px solid #999; padding: 6px; text-align: left; }
+    :root {
+      --navy: #1f3864; --blue: #2e5597; --bg: #f2f5fb; --card: #ffffff;
+      --text: #1d2433; --muted: #667085; --line: #e3e8f2;
+      --err-bg: #fdecea; --err: #b71c1c; --ok-bg: #e8f5e9; --ok: #1b7f4b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+      line-height: 1.5;
+    }
+    header {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: #fff; padding: 36px 16px 70px; text-align: center;
+    }
+    header h1 { margin: 0 0 6px; font-size: clamp(1.5rem, 4vw, 2.2rem); }
+    header p { margin: 0; opacity: .85; font-size: .95rem; }
+    .tag {
+      display: inline-block; margin-top: 10px; padding: 2px 12px; font-size: .78rem;
+      background: rgba(255, 255, 255, .18); border-radius: 999px;
+    }
+    main { max-width: 980px; margin: -44px auto 40px; padding: 0 16px; }
+    .card {
+      background: var(--card); border-radius: 14px; padding: 24px;
+      box-shadow: 0 6px 24px rgba(31, 56, 100, .10); margin-bottom: 24px;
+    }
+    .card h2 { margin: 0 0 16px; font-size: 1.2rem; color: var(--navy); }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .full { grid-column: 1 / -1; }
+    label { display: block; margin-bottom: 6px; font-weight: 600; font-size: .9rem; }
+    input {
+      width: 100%; padding: 11px 12px; font-size: 1rem;
+      border: 1px solid #cfd7e6; border-radius: 8px; background: #fbfcff;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    input:focus {
+      outline: none; border-color: var(--blue); background: #fff;
+      box-shadow: 0 0 0 3px rgba(46, 85, 151, .18);
+    }
+    button {
+      margin-top: 20px; width: 100%; padding: 13px 20px; font-size: 1rem;
+      font-weight: 600; color: #fff; border: 0; border-radius: 8px; cursor: pointer;
+      background: linear-gradient(135deg, var(--blue), var(--navy));
+      transition: transform .1s, box-shadow .15s;
+    }
+    button:hover { box-shadow: 0 6px 16px rgba(31, 56, 100, .30); }
+    button:active { transform: translateY(1px); }
+    #msg {
+      display: none; margin-bottom: 16px; padding: 10px 14px; border-radius: 6px;
+      font-size: .93rem; border-left: 4px solid;
+    }
+    #msg.err { background: var(--err-bg); color: var(--err); border-color: var(--err); }
+    #msg.ok { background: var(--ok-bg); color: var(--ok); border-color: var(--ok); }
+    .badge {
+      display: inline-block; margin-left: 8px; padding: 1px 10px; font-size: .8rem;
+      color: #fff; background: var(--blue); border-radius: 999px; vertical-align: middle;
+    }
+    .table-wrap { overflow-x: auto; }
+    table { border-collapse: collapse; width: 100%; }
+    th {
+      background: var(--navy); color: #fff; text-align: left; padding: 11px 12px;
+      font-size: .88rem; white-space: nowrap;
+    }
+    th:first-child { border-radius: 8px 0 0 0; }
+    th:last-child { border-radius: 0 8px 0 0; }
+    td { padding: 11px 12px; border-bottom: 1px solid var(--line); word-break: break-word; }
+    td[data-label="Reg. No"] { white-space: nowrap; }
+    tbody tr:nth-child(even) { background: #f8faff; }
+    tbody tr:hover { background: #eef3fc; }
+    td a { color: var(--blue); text-decoration: none; }
+    td a:hover { text-decoration: underline; }
+    .empty { text-align: center; color: var(--muted); padding: 28px 8px; }
+    footer { text-align: center; color: var(--muted); font-size: .82rem; padding-bottom: 28px; }
+
+    @media (max-width: 640px) {
+      header { padding: 28px 16px 60px; }
+      .card { padding: 18px; }
+      .grid { grid-template-columns: 1fr; }
+      thead { display: none; }
+      table, tbody, tr, td { display: block; width: 100%; }
+      tbody tr {
+        border: 1px solid var(--line); border-radius: 10px;
+        margin-bottom: 12px; padding: 6px 0; background: #fff !important;
+      }
+      td { border: 0; padding: 6px 14px; }
+      td[data-label="Reg. No"] { white-space: normal; }
+      td::before {
+        content: attr(data-label); display: block; font-size: .75rem;
+        font-weight: 700; text-transform: uppercase; color: var(--muted);
+      }
+      td.empty::before { content: none; }
+    }
   </style>
 </head>
 <body>
-  <h1>Assignment Submission Portal <small>(static demo)</small></h1>
-  <form id="f">
-    <label>Name</label><input id="name">
-    <label>Registration Number</label><input id="reg">
-    <label>Assignment Title</label><input id="title">
-    <label>Submission URL</label><input id="url">
-    <button type="submit">Submit</button>
-  </form>
-  <div id="msg"></div>
-  <h2>Saved Submissions (this browser only)</h2>
-  <table><thead><tr><th>Name</th><th>Reg. No</th><th>Assignment</th><th>URL</th></tr></thead>
-  <tbody id="rows"></tbody></table>
+  <header>
+    <h1>Assignment Submission Portal</h1>
+    <p>CSC418 &ndash; DevOps &middot; COMSATS University Islamabad, Attock Campus</p>
+    <span class="tag">Static demo &middot; deployed by GitHub Actions</span>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Submit an assignment</h2>
+      <div id="msg" role="status"></div>
+      <form id="f" novalidate>
+        <div class="grid">
+          <div>
+            <label for="name">Name</label>
+            <input id="name" placeholder="e.g. Haroon Ijaz">
+          </div>
+          <div>
+            <label for="reg">Registration Number</label>
+            <input id="reg" placeholder="e.g. FA23-BSE-002">
+          </div>
+          <div class="full">
+            <label for="title">Assignment Title</label>
+            <input id="title" placeholder="e.g. Lab Assignment 2">
+          </div>
+          <div class="full">
+            <label for="url">Submission URL</label>
+            <input id="url" placeholder="https://github.com/username/repository">
+          </div>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Saved Submissions <span class="badge" id="count">0</span></h2>
+      <p style="margin:-8px 0 12px;color:var(--muted);font-size:.85rem">Stored in this browser only (static demo).</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Reg. No</th><th>Assignment</th><th>URL</th></tr></thead>
+          <tbody id="rows"><tr id="emptyRow"><td class="empty" colspan="4">No submissions yet. Be the first to submit.</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <footer>Haroon Ijaz &middot; FA23-BSE-002 &middot; CSC418 Lab Midterm</footer>
+
   <script>
     const rows = document.getElementById("rows"), msg = document.getElementById("msg");
+    const count = document.getElementById("count"), emptyRow = document.getElementById("emptyRow");
+    let n = 0;
     const show = (t, ok) => { msg.textContent = t; msg.className = ok ? "ok" : "err"; msg.style.display = "block"; };
     document.getElementById("f").addEventListener("submit", e => {
       e.preventDefault();
       const v = id => document.getElementById(id).value.trim();
       const [name, reg, title, url] = [v("name"), v("reg"), v("title"), v("url")];
       if (!name || !reg || !title || !url) return show("All fields are required.", false);
-      try { if (!/^https?:$/.test(new URL(url).protocol)) throw 0; }
-      catch { return show("Submission URL is not a valid http(s) URL.", false); }
+      let valid = false;
+      try { valid = /^https?:$/.test(new URL(url).protocol) && !/\s/.test(url); } catch (err) { valid = false; }
+      if (!valid) return show("Submission URL is not a valid http(s) URL.", false);
+
       const tr = document.createElement("tr");
-      [name, reg, title, url].forEach(x => { const td = document.createElement("td"); td.textContent = x; tr.appendChild(td); });
+      [["Name", name], ["Reg. No", reg], ["Assignment", title], ["URL", url]].forEach(([label, text]) => {
+        const td = document.createElement("td");
+        td.setAttribute("data-label", label);
+        if (label === "URL") {
+          const a = document.createElement("a");
+          a.href = text; a.textContent = text; a.target = "_blank"; a.rel = "noopener noreferrer";
+          td.appendChild(a);
+        } else { td.textContent = text; }
+        tr.appendChild(td);
+      });
+      if (emptyRow) emptyRow.remove();
       rows.appendChild(tr);
+      count.textContent = ++n;
       show("Submission saved.", true);
       e.target.reset();
     });
