@@ -8,7 +8,7 @@
     "start": "node server.js",
     "receiver": "node receiver.js",
     "build": "vite build",
-    "test": "node test/server.test.js",
+    "test": "node --test --test-reporter=spec test/server.test.js",
     "build-report": "node scripts/build-report.js",
     "send-report": "node scripts/send-report.js",
     "send-email": "node scripts/send-email.js"
