@@ -2,12 +2,9 @@
 import json
 import os
 from http.server import BaseHTTPRequestHandler, HTTPServer
-
 PORT = int(os.getenv("PORT", "5050"))
 TOKEN = os.getenv("REPORT_TOKEN", "")          # optional shared secret
 OUTPUT = os.getenv("REPORT_FILE", "test-report.json")
-
-
 class Handler(BaseHTTPRequestHandler):
     def _reply(self, code, message):
         body = json.dumps({"message": message}).encode()

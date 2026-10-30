@@ -6,10 +6,7 @@ import sys
 import time
 import urllib.request
 import xml.etree.ElementTree as ET
-
 XML_PATH = os.getenv("JUNIT_XML", "results.xml")
-
-
 def parse_tests(path):
     if not os.path.exists(path):
         return [{"name": "test-suite", "result": "failed",
@@ -30,8 +27,6 @@ def parse_tests(path):
             tests.append({"name": case.get("name"), "result": "passed",
                           "failure_message": None})
     return tests
-
-
 def build_report():
     tests = parse_tests(XML_PATH)
     passed = sum(t["result"] == "passed" for t in tests)
@@ -51,7 +46,6 @@ def build_report():
         "tests": tests,
     }
 
-
 def email_body(report):
     s = report["summary"]
     lines = [
@@ -70,7 +64,6 @@ def email_body(report):
         lines.append(line)
     return "\n".join(lines)
 
-
 def post_report(report, url, token):
     data = json.dumps(report).encode()
     headers = {"Content-Type": "application/json",
@@ -86,7 +79,6 @@ def post_report(report, url, token):
             print(f"Attempt {attempt} failed: {exc}")
             time.sleep(3)
     return False
-
 
 if __name__ == "__main__":
     report = build_report()
