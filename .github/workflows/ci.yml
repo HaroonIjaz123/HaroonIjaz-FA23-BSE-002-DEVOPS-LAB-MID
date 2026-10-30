@@ -32,13 +32,13 @@ jobs:
         with:
           name: junit-results
       - name: Build report and send to localhost receiver
-        run: python scripts/send_report.py
+        run: python send_report.py
         env:
           RECEIVER_URL: ${{ secrets.RECEIVER_URL }}
           REPORT_TOKEN: ${{ secrets.REPORT_TOKEN }}
       - name: Email the report (bonus)
         if: always()
-        run: python scripts/send_email.py
+        run: python send_email.py
         env:
           SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
@@ -63,8 +63,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - name: Prepare site folder
+        run: |
+          mkdir public
+          cp index.html public/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: public
       - id: deployment
         uses: actions/deploy-pages@v4
