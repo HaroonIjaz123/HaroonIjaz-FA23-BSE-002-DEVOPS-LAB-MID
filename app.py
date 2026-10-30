@@ -177,12 +177,12 @@ def is_valid_url(value):
     value = (value or "").strip()
     if not value or " " in value:
         return False
-    # parsed = urlparse(value)
-    # return parsed.scheme in ("http", "https") and bool(parsed.netloc)
+    parsed = urlparse(value)
+    return parsed.scheme in ("http", "https") and bool(parsed.netloc)
 
-    # creating defect 
-    parsed = urlparse(value) 
-    return True    
+    # # creating defect 
+    # parsed = urlparse(value) 
+    # return True    
 
 
 def validate_submission(form):
