@@ -2,7 +2,6 @@ import json
 import os
 from urllib.parse import urlparse
 
-
 from flask import Flask, redirect, render_template_string, request, url_for
 
 PAGE = """
