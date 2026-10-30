@@ -5,137 +5,71 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Assignment Submission Portal (Demo)</title>
   <style>
-    :root {
-      --navy: #1f3864; --blue: #2e5597; --bg: #f2f5fb; --card: #ffffff;
-      --text: #1d2433; --muted: #667085; --line: #e3e8f2;
-      --err-bg: #fdecea; --err: #b71c1c; --ok-bg: #e8f5e9; --ok: #1b7f4b;
-    }
-    * { box-sizing: border-box; }
     body {
-      margin: 0; background: var(--bg); color: var(--text);
-      font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
-      line-height: 1.5;
+      max-width: 760px; margin: 0 auto; padding: 24px 16px;
+      font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+      color: #222; line-height: 1.5;
     }
-    header {
-      background: linear-gradient(135deg, var(--navy), var(--blue));
-      color: #fff; padding: 36px 16px 70px; text-align: center;
-    }
-    header h1 { margin: 0 0 6px; font-size: clamp(1.5rem, 4vw, 2.2rem); }
-    header p { margin: 0; opacity: .85; font-size: .95rem; }
-    .tag {
-      display: inline-block; margin-top: 10px; padding: 2px 12px; font-size: .78rem;
-      background: rgba(255, 255, 255, .18); border-radius: 999px;
-    }
-    main { max-width: 980px; margin: -44px auto 40px; padding: 0 16px; }
-    .card {
-      background: var(--card); border-radius: 14px; padding: 24px;
-      box-shadow: 0 6px 24px rgba(31, 56, 100, .10); margin-bottom: 24px;
-    }
-    .card h2 { margin: 0 0 16px; font-size: 1.2rem; color: var(--navy); }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .full { grid-column: 1 / -1; }
-    label { display: block; margin-bottom: 6px; font-weight: 600; font-size: .9rem; }
+    header { text-align: center; margin-bottom: 24px; }
+    h1 { margin: 0 0 4px; font-size: 1.6rem; }
+    h2 { font-size: 1.15rem; margin: 0 0 12px; }
+    header p { margin: 0; color: #666; font-size: .9rem; }
+    section { border-top: 1px solid #ddd; padding: 20px 0; }
+    label { display: block; margin-bottom: 4px; font-weight: 600; font-size: .9rem; }
     input {
-      width: 100%; padding: 11px 12px; font-size: 1rem;
-      border: 1px solid #cfd7e6; border-radius: 8px; background: #fbfcff;
-      transition: border-color .15s, box-shadow .15s;
+      width: 100%; padding: 8px 10px; margin-bottom: 14px; font-size: 1rem;
+      border: 1px solid #bbb; border-radius: 4px; box-sizing: border-box;
     }
-    input:focus {
-      outline: none; border-color: var(--blue); background: #fff;
-      box-shadow: 0 0 0 3px rgba(46, 85, 151, .18);
-    }
+    input:focus { outline: 2px solid #4a7bd0; border-color: #4a7bd0; }
     button {
-      margin-top: 20px; width: 100%; padding: 13px 20px; font-size: 1rem;
-      font-weight: 600; color: #fff; border: 0; border-radius: 8px; cursor: pointer;
-      background: linear-gradient(135deg, var(--blue), var(--navy));
-      transition: transform .1s, box-shadow .15s;
+      padding: 9px 22px; font-size: 1rem; color: #fff; background: #2f5fb3;
+      border: 0; border-radius: 4px; cursor: pointer;
     }
-    button:hover { box-shadow: 0 6px 16px rgba(31, 56, 100, .30); }
-    button:active { transform: translateY(1px); }
-    #msg {
-      display: none; margin-bottom: 16px; padding: 10px 14px; border-radius: 6px;
-      font-size: .93rem; border-left: 4px solid;
-    }
-    #msg.err { background: var(--err-bg); color: var(--err); border-color: var(--err); }
-    #msg.ok { background: var(--ok-bg); color: var(--ok); border-color: var(--ok); }
-    .badge {
-      display: inline-block; margin-left: 8px; padding: 1px 10px; font-size: .8rem;
-      color: #fff; background: var(--blue); border-radius: 999px; vertical-align: middle;
-    }
+    button:hover { background: #254c91; }
+    #msg { display: none; margin-bottom: 14px; padding: 8px 12px; border-radius: 4px; font-size: .92rem; }
+    #msg.err { background: #fdecec; color: #a12727; }
+    #msg.ok { background: #e7f6ec; color: #1e6b3a; }
+    .note { margin: 0 0 12px; color: #666; font-size: .85rem; }
     .table-wrap { overflow-x: auto; }
     table { border-collapse: collapse; width: 100%; }
-    th {
-      background: var(--navy); color: #fff; text-align: left; padding: 11px 12px;
-      font-size: .88rem; white-space: nowrap;
-    }
-    th:first-child { border-radius: 8px 0 0 0; }
-    th:last-child { border-radius: 0 8px 0 0; }
-    td { padding: 11px 12px; border-bottom: 1px solid var(--line); word-break: break-word; }
-    td[data-label="Reg. No"] { white-space: nowrap; }
-    tbody tr:nth-child(even) { background: #f8faff; }
-    tbody tr:hover { background: #eef3fc; }
-    td a { color: var(--blue); text-decoration: none; }
-    td a:hover { text-decoration: underline; }
-    .empty { text-align: center; color: var(--muted); padding: 28px 8px; }
-    footer { text-align: center; color: var(--muted); font-size: .82rem; padding-bottom: 28px; }
-
-    @media (max-width: 640px) {
-      header { padding: 28px 16px 60px; }
-      .card { padding: 18px; }
-      .grid { grid-template-columns: 1fr; }
-      thead { display: none; }
-      table, tbody, tr, td { display: block; width: 100%; }
-      tbody tr {
-        border: 1px solid var(--line); border-radius: 10px;
-        margin-bottom: 12px; padding: 6px 0; background: #fff !important;
-      }
-      td { border: 0; padding: 6px 14px; }
-      td[data-label="Reg. No"] { white-space: normal; }
-      td::before {
-        content: attr(data-label); display: block; font-size: .75rem;
-        font-weight: 700; text-transform: uppercase; color: var(--muted);
-      }
-      td.empty::before { content: none; }
-    }
+    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #ddd; }
+    th { background: #f3f4f6; font-size: .9rem; }
+    td { word-break: break-word; }
+    td a { color: #2f5fb3; }
+    .empty { text-align: center; color: #666; }
+    footer { text-align: center; color: #666; font-size: .8rem; border-top: 1px solid #ddd; padding-top: 16px; }
   </style>
 </head>
 <body>
   <header>
     <h1>Assignment Submission Portal</h1>
     <p>CSC418 &ndash; DevOps &middot; COMSATS University Islamabad, Attock Campus</p>
-    <span class="tag">Static demo &middot; deployed by GitHub Actions</span>
   </header>
 
   <main>
-    <section class="card">
+    <section>
       <h2>Submit an assignment</h2>
       <div id="msg" role="status"></div>
       <form id="f" novalidate>
-        <div class="grid">
-          <div>
-            <label for="name">Name</label>
-            <input id="name" placeholder="e.g. Haroon Ijaz">
-          </div>
-          <div>
-            <label for="reg">Registration Number</label>
-            <input id="reg" placeholder="e.g. FA23-BSE-002">
-          </div>
-          <div class="full">
-            <label for="title">Assignment Title</label>
-            <input id="title" placeholder="e.g. Lab Assignment 2">
-          </div>
-          <div class="full">
-            <label for="url">Submission URL</label>
-            <input id="url" placeholder="https://github.com/username/repository">
-          </div>
-        </div>
+        <label for="name">Name</label>
+        <input id="name" placeholder="e.g. Haroon Ijaz">
+
+        <label for="reg">Registration Number</label>
+        <input id="reg" placeholder="e.g. FA23-BSE-002">
+
+        <label for="title">Assignment Title</label>
+        <input id="title" placeholder="e.g. Lab Assignment 2">
+
+        <label for="url">Submission URL</label>
+        <input id="url" placeholder="https://github.com/username/repository">
+
         <button type="submit">Submit</button>
       </form>
     </section>
 
-    <section class="card">
-      <h2>Saved Submissions <span class="badge" id="count">0</span></h2>
-      <p style="margin:-8px 0 12px;color:var(--muted);font-size:.85rem">Stored in this browser only (static demo).</p>
+    <section>
+      <h2>Saved Submissions (<span id="count">0</span>)</h2>
+      <p class="note">Stored in this browser only (static demo).</p>
       <div class="table-wrap">
         <table>
           <thead><tr><th>Name</th><th>Reg. No</th><th>Assignment</th><th>URL</th></tr></thead>
