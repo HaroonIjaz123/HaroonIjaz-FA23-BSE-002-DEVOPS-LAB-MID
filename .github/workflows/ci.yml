@@ -9,18 +9,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-node@v4
         with:
-          python-version: "3.12"
-      - run: pip install -r requirements.txt
-      - name: Run tests
-        run: python -m pytest -v --junitxml=results.xml
-      - name: Keep JUnit results
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run JavaScript tests
+        run: npm test > test-output.txt
+      - name: Build React application
+        run: npm run build
+      - name: Keep test output for report job
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: junit-results
-          path: results.xml
+          name: ci-test-output
+          path: test-output.txt
 
   report:
     needs: test
@@ -28,17 +31,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
       - uses: actions/download-artifact@v4
         with:
-          name: junit-results
-      - name: Build report and send to localhost receiver
-        run: python send_report.py
+          name: ci-test-output
+      - name: Build detailed test report
+        run: npm run build-report
+      - name: Send report to ngrok receiver
+        run: npm run send-report
         env:
           RECEIVER_URL: ${{ secrets.RECEIVER_URL }}
           REPORT_TOKEN: ${{ secrets.REPORT_TOKEN }}
       - name: Email the report (bonus)
-        if: always()
-        run: python send_email.py
+        if: always() && hashFiles('test-report.json') != ''
+        run: npm run send-email
         env:
           SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
           SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
@@ -62,13 +72,15 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
       - uses: actions/configure-pages@v5
-      - name: Prepare site folder
-        run: |
-          mkdir public
-          cp index.html public/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: public
+          path: dist
       - id: deployment
         uses: actions/deploy-pages@v4

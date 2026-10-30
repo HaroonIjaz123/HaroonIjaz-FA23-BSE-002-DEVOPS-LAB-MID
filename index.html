@@ -1,116 +1,13 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Assignment Submission Portal (Demo)</title>
-  <style>
-    body {
-      max-width: 760px; margin: 0 auto; padding: 24px 16px;
-      font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
-      color: #222; line-height: 1.5;
-    }
-    header { text-align: center; margin-bottom: 24px; }
-    h1 { margin: 0 0 4px; font-size: 1.6rem; }
-    h2 { font-size: 1.15rem; margin: 0 0 12px; }
-    header p { margin: 0; color: #666; font-size: .9rem; }
-    section { border-top: 1px solid #ddd; padding: 20px 0; }
-    label { display: block; margin-bottom: 4px; font-weight: 600; font-size: .9rem; }
-    input {
-      width: 100%; padding: 8px 10px; margin-bottom: 14px; font-size: 1rem;
-      border: 1px solid #bbb; border-radius: 4px; box-sizing: border-box;
-    }
-    input:focus { outline: 2px solid #4a7bd0; border-color: #4a7bd0; }
-    button {
-      padding: 9px 22px; font-size: 1rem; color: #fff; background: #2f5fb3;
-      border: 0; border-radius: 4px; cursor: pointer;
-    }
-    button:hover { background: #254c91; }
-    #msg { display: none; margin-bottom: 14px; padding: 8px 12px; border-radius: 4px; font-size: .92rem; }
-    #msg.err { background: #fdecec; color: #a12727; }
-    #msg.ok { background: #e7f6ec; color: #1e6b3a; }
-    .note { margin: 0 0 12px; color: #666; font-size: .85rem; }
-    .table-wrap { overflow-x: auto; }
-    table { border-collapse: collapse; width: 100%; }
-    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #ddd; }
-    th { background: #f3f4f6; font-size: .9rem; }
-    td { word-break: break-word; }
-    td a { color: #2f5fb3; }
-    .empty { text-align: center; color: #666; }
-    footer { text-align: center; color: #666; font-size: .8rem; border-top: 1px solid #ddd; padding-top: 16px; }
-  </style>
-</head>
-<body>
-  <header>
-    <h1>Assignment Submission Portal</h1>
-    <p>CSC418 &ndash; DevOps &middot; COMSATS University Islamabad, Attock Campus</p>
-  </header>
-
-  <main>
-    <section>
-      <h2>Submit an assignment</h2>
-      <div id="msg" role="status"></div>
-      <form id="f" novalidate>
-        <label for="name">Name</label>
-        <input id="name" placeholder="e.g. Haroon Ijaz">
-
-        <label for="reg">Registration Number</label>
-        <input id="reg" placeholder="e.g. FA23-BSE-002">
-
-        <label for="title">Assignment Title</label>
-        <input id="title" placeholder="e.g. Lab Assignment 2">
-
-        <label for="url">Submission URL</label>
-        <input id="url" placeholder="https://github.com/username/repository">
-
-        <button type="submit">Submit</button>
-      </form>
-    </section>
-
-    <section>
-      <h2>Saved Submissions (<span id="count">0</span>)</h2>
-      <p class="note">Stored in this browser only (static demo).</p>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Name</th><th>Reg. No</th><th>Assignment</th><th>URL</th></tr></thead>
-          <tbody id="rows"><tr id="emptyRow"><td class="empty" colspan="4">No submissions yet. Be the first to submit.</td></tr></tbody>
-        </table>
-      </div>
-    </section>
-  </main>
-  <footer>Haroon Ijaz &middot; FA23-BSE-002 &middot; CSC418 Lab Midterm</footer>
-
-  <script>
-    const rows = document.getElementById("rows"), msg = document.getElementById("msg");
-    const count = document.getElementById("count"), emptyRow = document.getElementById("emptyRow");
-    let n = 0;
-    const show = (t, ok) => { msg.textContent = t; msg.className = ok ? "ok" : "err"; msg.style.display = "block"; };
-    document.getElementById("f").addEventListener("submit", e => {
-      e.preventDefault();
-      const v = id => document.getElementById(id).value.trim();
-      const [name, reg, title, url] = [v("name"), v("reg"), v("title"), v("url")];
-      if (!name || !reg || !title || !url) return show("All fields are required.", false);
-      let valid = false;
-      try { valid = /^https?:$/.test(new URL(url).protocol) && !/\s/.test(url); } catch (err) { valid = false; }
-      if (!valid) return show("Submission URL is not a valid http(s) URL.", false);
-
-      const tr = document.createElement("tr");
-      [["Name", name], ["Reg. No", reg], ["Assignment", title], ["URL", url]].forEach(([label, text]) => {
-        const td = document.createElement("td");
-        td.setAttribute("data-label", label);
-        if (label === "URL") {
-          const a = document.createElement("a");
-          a.href = text; a.textContent = text; a.target = "_blank"; a.rel = "noopener noreferrer";
-          td.appendChild(a);
-        } else { td.textContent = text; }
-        tr.appendChild(td);
-      });
-      if (emptyRow) emptyRow.remove();
-      rows.appendChild(tr);
-      count.textContent = ++n;
-      show("Submission saved.", true);
-      e.target.reset();
-    });
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1f3864" />
+    <title>Assignment Submission Portal</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

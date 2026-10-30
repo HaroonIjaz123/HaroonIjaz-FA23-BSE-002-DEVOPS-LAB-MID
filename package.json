@@ -1,0 +1,25 @@
+{
+  "name": "assignment-submission-portal",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "start": "node server.js",
+    "receiver": "node receiver.js",
+    "build": "vite build",
+    "test": "node test/server.test.js",
+    "build-report": "node scripts/build-report.js",
+    "send-report": "node scripts/send-report.js",
+    "send-email": "node scripts/send-email.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "nodemailer": "^10.3.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "vite": "^7.1.7"
+  }
+}
