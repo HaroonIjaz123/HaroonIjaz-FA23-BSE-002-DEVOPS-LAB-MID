@@ -67,6 +67,14 @@ GitHub-hosted Actions cannot reach `localhost` on your computer directly. Keep t
 
 Push to GitHub while both local processes are running. Actions runs the tests and React build, creates a JSON report, posts it through the ngrok tunnel, and stores the report as an Actions artifact. If ngrok gives you a new URL, update `RECEIVER_URL`. If the receiver or tunnel is offline, report delivery fails and the report remains available as an artifact. Email is skipped unless SMTP credentials are set.
 
+To send a report manually from the project folder, first create it, then post it:
+
+```bash
+npm test > test-output.txt
+npm run build-report
+npm run send-report
+```
+
 ## GitHub Pages
 
 The workflow deploys the static React build on pushes to `main`. Enable GitHub Pages using the `github-pages` environment if the repository has not used Pages before. The Pages version uses browser storage; the Node API is not hosted by GitHub Pages.

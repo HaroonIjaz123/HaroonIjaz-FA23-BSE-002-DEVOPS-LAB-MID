@@ -96,5 +96,6 @@ test('CI report builder keeps individual pass, fail, and skipped test results', 
 
 test('CI report builder marks an empty or missing test run as failed', () => {
   const report = buildReport('', {});
-  assert.deepEqual(report.summary, { total: 0, passed: 0, failed: 0, skipped: 0, overall_status: 'FAILED' });
+  assert.deepEqual(report.summary, { total: 1, passed: 0, failed: 1, skipped: 0, overall_status: 'FAILED' });
+  assert.equal(report.tests[0].name, 'test runner');
 });

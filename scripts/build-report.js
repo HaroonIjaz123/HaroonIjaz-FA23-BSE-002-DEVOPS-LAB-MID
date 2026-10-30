@@ -15,9 +15,12 @@ export function buildReport(output, metadata = process.env) {
     });
   }
 
-  if (!tests.length || clean.includes('✖ test at ')) {
+  if (!tests.length) {
     const failCount = Number(clean.match(/^ℹ fail (\d+)$/m)?.[1] || 0);
-    if (!tests.length && failCount) tests.push({ name: 'test runner', result: 'failed', failure_message: 'See the test job log for details.' });
+    tests.push({
+      name: 'test runner', result: 'failed',
+      failure_message: failCount ? 'See the test job log for details.' : 'No individual test results were found in test-output.txt.',
+    });
   }
   const passed = tests.filter((item) => item.result === 'passed').length;
   const failed = tests.filter((item) => item.result === 'failed').length;
