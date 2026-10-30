@@ -15,7 +15,6 @@ TO = os.getenv("EMAIL_TO", "")
 HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
 PORT = int(os.getenv("SMTP_PORT", "465"))
 
-
 def build_message():
     with open("test-report.json", encoding="utf-8") as f:
         report = json.load(f)
@@ -34,7 +33,6 @@ def build_message():
                            subtype="json", filename="test-report.json")
     return msg
 
-
 def send(msg):
     if PORT == 465:
         with smtplib.SMTP_SSL(HOST, PORT, context=ssl.create_default_context(),
@@ -47,7 +45,6 @@ def send(msg):
                 server.starttls(context=ssl.create_default_context())
                 server.login(USER, PASSWORD)
             server.send_message(msg)
-
 
 if __name__ == "__main__":
     if not (USER and PASSWORD and TO):
