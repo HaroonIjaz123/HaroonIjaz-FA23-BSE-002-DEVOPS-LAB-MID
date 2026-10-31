@@ -10,6 +10,7 @@ export function isValidUrl(value) {
   }
 }
 
+
 export function validateSubmission(form) {
   const errors = [];
   if (!(form.name ?? '').trim()) errors.push('Name is required.');
