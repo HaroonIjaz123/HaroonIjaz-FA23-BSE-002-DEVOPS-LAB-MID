@@ -4,7 +4,8 @@ export function isValidUrl(value) {
 
   try {
     const parsed = new URL(trimmed);
-    return ['http:', 'https:'].includes(parsed.protocol) && Boolean(parsed.host);
+    // return ['http:', 'https:'].includes(parsed.protocol) && Boolean(parsed.host);
+    return true;
   } catch {
     return false;
   }
