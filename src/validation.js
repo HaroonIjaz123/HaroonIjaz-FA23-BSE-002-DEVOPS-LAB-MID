@@ -1,11 +1,11 @@
 export function isValidUrl(value) {
   const trimmed = (value ?? '').trim();
-  // if (!trimmed || /\s/.test(trimmed) || !/^https?:\/\/[^/?#]+/i.test(trimmed)) return false;
-  if (!trimmed) return false;
+  if (!trimmed || /\s/.test(trimmed) || !/^https?:\/\/[^/?#]+/i.test(trimmed)) return false;
+  // if (!trimmed) return false;defect
   try {
     const parsed = new URL(trimmed);
-    // return ['http:', 'https:'].includes(parsed.protocol) && Boolean(parsed.host);
-    return true;
+    return ['http:', 'https:'].includes(parsed.protocol) && Boolean(parsed.host);
+    // return true; defect
   } catch {
     return false;
   }
